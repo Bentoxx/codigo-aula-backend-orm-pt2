@@ -33,6 +33,35 @@ export default class AuthorController {
         }
     }
 
+    async createProfile(req: Request, res: Response){
+        const { description } = req.body
+        const { id } = req.params
+        try {
+            const author = await prisma.author.findUnique({
+                where: {
+                    id: Number(id)
+                }
+            })
+            if (!author){
+                return res.status(404).json({
+                    message: 'The informed author does not exist.'
+                })
+            }
+            const profile = await prisma.profile.create({
+                data: {
+                    description,
+                    authorId: author.id
+                }
+            })
+            return res.status(201).json(profile)
+        } catch (error) {
+            const erro = error as Error
+            return res.status(400).json({
+                message: erro.message
+            })
+        }
+    }
+
     async list(req: Request, res: Response){        
         try {
             const authors = await prisma.author.findMany()            
