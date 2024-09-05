@@ -39,9 +39,27 @@ model Post{
   createdAt DateTime @db.Timestamptz()  @default(now())
   author Author @relation(fields: [authorId], references: [id])
   authorId  Int @map("author_id")
+  postCategory  PostCategory[]
 
   @@map("posts")
 }
 
-
 //Category -> muitos para muitos
+model Category{
+  id String @id @default(uuid())
+  name  String
+  postCategory  PostCategory[]
+
+  @@map("categories")
+}
+
+model PostCategory{
+  post Post @relation(fields: [postId], references: [id])
+  postId  String @map("post_id")
+
+  category Category @relation(fields: [categoryId], references: [id])
+  categoryId  String @map("category_id")
+
+  @@map("post_category")
+  @@id([postId, categoryId])
+}
