@@ -14,6 +14,8 @@ routes.delete('/authors/:id', new AuthorController().delete)
 routes.post('/authors/:id/profile', new AuthorController().createProfile)
 
 routes.post('/categories', new CategoryController().create)
+
 routes.post('/posts', new PostController().create)
+routes.get('/posts', new PostController().list)
 
 export default routes
